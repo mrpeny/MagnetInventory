@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Magnet Inventory</string>
+    <string name="empty_view_title_text">No magnets added yet</string>
+    <string name="empty_view_subtitle_text">Get started by adding a magnet</string>
+</resources>
