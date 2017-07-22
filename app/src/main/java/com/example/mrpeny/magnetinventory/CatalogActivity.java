@@ -1,28 +1,38 @@
 package com.example.mrpeny.magnetinventory;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.mrpeny.magnetinventory.data.MagnetContract.MagnetEntry;
 import com.example.mrpeny.magnetinventory.data.MagnetDbHelper;
 
-public class CatalogActivity extends AppCompatActivity {
+import static android.R.id.list;
+
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     MagnetDbHelper mDbHelper;
+    MagnetCursorAdapter mMagnetCursorAdapter;
+
+    private static final int MAGNET_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        TextView resultTextView = (TextView) findViewById(R.id.result_textView);
+        //TextView resultTextView = (TextView) findViewById(R.id.result_textView);
         mDbHelper = new MagnetDbHelper(this);
 
         // Setup FAB to open EditorActivity
@@ -35,6 +45,17 @@ public class CatalogActivity extends AppCompatActivity {
             }
         });
 
+        ListView catalogListView = (ListView) findViewById(R.id.catalog_list_view);
+
+        View emptyView = findViewById(R.id.empty_view);
+        catalogListView.setEmptyView(emptyView);
+
+        mMagnetCursorAdapter = new MagnetCursorAdapter(this, null, 0);
+        catalogListView.setAdapter(mMagnetCursorAdapter);
+
+        getLoaderManager().initLoader(MAGNET_LOADER, null, this);
+
+        /*
         insertDummyMagnet();
         insertDummyMagnet();
 
@@ -60,6 +81,7 @@ public class CatalogActivity extends AppCompatActivity {
         } finally {
             cursor.close();
         }
+        */
     }
 
     private void insertDummyMagnet() {
@@ -72,5 +94,36 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(MagnetEntry.SUPPLIER_PHONE, "+36203803295");
 
         database.insert(MagnetEntry.TABLE_NAME, null, values);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                MagnetEntry._ID,
+                MagnetEntry.NAME,
+                MagnetEntry.PRICE,
+                MagnetEntry.QUANTITY
+        };
+
+        CursorLoader cursorLoader = new CursorLoader(
+                this,
+                MagnetEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mMagnetCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mMagnetCursorAdapter.swapCursor(null);
     }
 }

@@ -2,4 +2,8 @@
     <string name="app_name">Magnet Inventory</string>
     <string name="empty_view_title_text">No magnets added yet</string>
     <string name="empty_view_subtitle_text">Get started by adding a magnet</string>
+    <string name="currency">Euro</string>
+    <string name="currency_quantity_separator">/</string>
+    <string name="on_stock">on stock</string>
+    <string name="sale">sale</string>
 </resources>
