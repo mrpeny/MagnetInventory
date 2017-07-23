@@ -8,24 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Details">
+    <style name="DetailsStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
     </style>
 
-    <style name="QuantityButton">
+    <style name="QuantityButtonStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">@dimen/zero_width</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="CategoryLabel">
+    <style name="LabelStyle">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
-
-
 </resources>

@@ -1,9 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mrpeny.magnetinventory.DetailActivity">
+    android:layout_margin="@dimen/general_window_padding"
+    android:orientation="vertical"
+    tools:context="com.example.mrpeny.magnetinventory.CatalogActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <!-- Name related views -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Name label -->
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/name_text_view" />
+
+        <!-- Name edit text -->
+        <EditText
+            android:id="@+id/name_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/name_hint"
+            android:inputType="textCapWords" />
+
+    </LinearLayout>
+
+    <!-- Price related views -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Price label -->
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/price_text_view" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:paddingLeft="@dimen/text_view_spacing">
+
+            <!-- Price edit text -->
+            <EditText
+                android:id="@+id/price_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+
+            <!-- Currency -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/margin_padding_normal"
+                android:paddingTop="@dimen/margin_padding_small"
+                android:text="@string/currency_text_view"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!-- Quantity related views -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Quantity label -->
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/quantity_text_view" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <!-- Quantity edit text -->
+            <EditText
+                android:id="@+id/quantity_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:inputType="number" />
+
+            <!-- Decrement -->
+            <Button
+                android:id="@+id/decrement_button"
+                style="@style/QuantityButtonStyle"
+                android:onClick="decreaseQuantity"
+                android:text="@string/decrease_quantity_button_text" />
+
+            <!-- Increment -->
+            <Button
+                android:id="@+id/increment_button"
+                style="@style/QuantityButtonStyle"
+                android:onClick="increaseQuantity"
+                android:text="@string/increase_quantity_button_text" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Supplier phone -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Supplier label -->
+        <TextView
+            style="@style/LabelStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/supplier_phone_text_view" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <!-- Phone edit text -->
+            <EditText
+                android:id="@+id/supplier_phone_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:hint="@string/supplier_hint"
+                android:inputType="phone" />
+
+            <!-- Call Button -->
+            <ImageButton
+                android:id="@+id/call_image_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="orderProduct"
+                android:src="@drawable/ic_call_supplier" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Image category -->
+    <ImageView
+        android:id="@+id/iv_product_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_padding_large"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
+</LinearLayout>

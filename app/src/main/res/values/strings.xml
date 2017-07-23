@@ -1,9 +1,36 @@
 <resources>
+    <!--General texts -->
     <string name="app_name">Magnet Inventory</string>
+
+    <!-- Catalog Activity texts -->
     <string name="empty_view_title_text">No magnets added yet</string>
     <string name="empty_view_subtitle_text">Get started by adding a magnet</string>
+
+    <!-- Detail Activity texts -->
     <string name="currency">Euro</string>
     <string name="currency_quantity_separator">/</string>
     <string name="on_stock">on stock</string>
     <string name="sale">sale</string>
+    <string name="name_text_view">Name</string>
+    <string name="name_hint">name</string>
+    <string name="price_text_view">Price</string>
+    <string name="currency_text_view">Euro</string>
+    <string name="quantity_text_view">Quantity</string>
+    <string name="decrease_quantity_button_text">-</string>
+    <string name="increase_quantity_button_text">+</string>
+    <string name="supplier_phone_text_view">Supplier phone</string>
+    <string name="supplier_hint">+36704211384</string>
+    <string name="action_insert_dummy_data">Insert dummy magnet</string>
+    <string name="action_delete_all_entries">Delet all magnets</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete">Delete</string>
+    <string name="editor_activity_title_new_magnet">Add Magnet</string>
+    <string name="editor_activity_title_edit_magnet">Edit Magnet</string>
+    <string name="toast_message_magnet_not_saved">Saving magnet failed</string>
+    <string name="toast_message_magnet_saved">Magnet saved</string>
+    <string name="toast_message_magnet_update_failed">Update failed</string>
+    <string name="toast_message_magnet_updated">Magnet updated</string>
+    <string name="toast_message_fill_in_all_fields">Fill in all fields and take a picture</string>
+    <string name="toast_message_magnet_not_deleted">Delete failed</string>
+    <string name="toast_message_magnet_deleted">Magnet deleted</string>
 </resources>
