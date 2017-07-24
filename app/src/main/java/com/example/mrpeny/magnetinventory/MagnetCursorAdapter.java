@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import com.example.mrpeny.magnetinventory.data.MagnetContract.MagnetEntry;
 
-import static android.R.attr.name;
-
 /**
  * CursorAdapter for magnets that populates the list view from cursor
  */
@@ -42,7 +40,7 @@ public class MagnetCursorAdapter extends CursorAdapter {
 
         final int id = cursor.getInt(idColumnIndex);
         String name = cursor.getString(nameColumnIndex);
-        int price = cursor.getInt(priceColumnIndex);
+        float price = cursor.getFloat(priceColumnIndex);
         int quantity = cursor.getInt(quantityColumnIndex);
 
         nameTextView.setText(name);

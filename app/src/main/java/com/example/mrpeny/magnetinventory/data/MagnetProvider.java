@@ -106,6 +106,11 @@ public class MagnetProvider extends ContentProvider {
             throw new IllegalArgumentException("No supplier added to magnet.");
         }
 
+        byte[] image = contentValues.getAsByteArray(MagnetEntry.IMAGE);
+        if (image.length == 0) {
+            throw new IllegalArgumentException("No image added to magnet.");
+        }
+
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         long newMagnetID = database.insert(MagnetEntry.TABLE_NAME, null, contentValues);
@@ -153,8 +158,10 @@ public class MagnetProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
         switch (match) {
+            // Update the full list of magnets based on the specified selection
             case MAGNETS:
                 return updateMagnet(uri, contentValues, selection, selectionArgs);
+            // Update certain rows of the table based on selected IDs (or commonly single ID).
             case MAGNET_ID:
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updateMagnet(uri, contentValues, MagnetEntry._ID + "=?", selectionArgs);
@@ -193,6 +200,13 @@ public class MagnetProvider extends ContentProvider {
             String supplierPhone = contentValues.getAsString(MagnetEntry.SUPPLIER_PHONE);
             if (supplierPhone == null) {
                 throw new IllegalArgumentException("No supplier added to magnet.");
+            }
+        }
+
+        if (contentValues.containsKey(MagnetEntry.IMAGE)) {
+            byte[] image = contentValues.getAsByteArray(MagnetEntry.IMAGE);
+            if (image.length == 0) {
+                throw new IllegalArgumentException("No image added to magnet.");
             }
         }
 

@@ -15,7 +15,7 @@ public class MagnetDbHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = MagnetDbHelper.class.getSimpleName();
 
-    private static final String DATABASE_NAME = "magnets_database.db";
+    private static final String DATABASE_NAME = "magnet_inventory.db";
 
     private static final int DATABASE_VERSION = 1;
 
@@ -33,7 +33,7 @@ public class MagnetDbHelper extends SQLiteOpenHelper {
                 MagnetEntry.PRICE + " INTEGER NOT NULL DEFAULT 0, " +
                 MagnetEntry.QUANTITY + " INTEGER NOT NULL DEFAULT 0, " +
                 MagnetEntry.SUPPLIER_PHONE + " TEXT NOT NULL, " +
-                MagnetEntry.IMAGE + " BLOB);";
+                MagnetEntry.IMAGE + " BLOB NOT NULL);";
 
         db.execSQL(SQL_CREATE_MAGNETS_TABLE);
     }

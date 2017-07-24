@@ -66,7 +66,7 @@
                 android:layout_alignParentRight="true"
                 android:paddingRight="@dimen/margin_padding_normal"
                 android:paddingTop="@dimen/margin_padding_small"
-                android:text="@string/currency_text_view"
+                android:text="@string/currency"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         </RelativeLayout>
@@ -154,7 +154,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="orderProduct"
+                android:onClick="callSupplier"
                 android:src="@drawable/ic_call_supplier" />
 
         </LinearLayout>
@@ -163,7 +163,7 @@
 
     <!-- Image category -->
     <ImageView
-        android:id="@+id/iv_product_image"
+        android:id="@+id/magnet_image_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

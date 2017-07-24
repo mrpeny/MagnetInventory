@@ -55,46 +55,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         catalogListView.setAdapter(mMagnetCursorAdapter);
 
         getLoaderManager().initLoader(MAGNET_LOADER, null, this);
-
         /*
         insertDummyMagnet();
         insertDummyMagnet();
-
-        SQLiteDatabase database = mDbHelper.getReadableDatabase();
-
-        String[] projection = new String[] {
-                MagnetEntry._ID,
-                MagnetEntry.NAME,
-                MagnetEntry.PRICE,
-                MagnetEntry.QUANTITY };
-
-        Cursor cursor = database.query(MagnetEntry.TABLE_NAME, projection, null, null, null, null, null);
-
-        int nameColumnIndex = cursor.getColumnIndex(MagnetEntry.NAME);
-
-
-        try {
-            cursor.moveToFirst();
-            while (cursor.moveToNext()) {
-                String name = cursor.getString(nameColumnIndex);
-                resultTextView.append("\nName: " + name);
-            }
-        } finally {
-            cursor.close();
-        }
         */
-    }
-
-    private void insertDummyMagnet() {
-        SQLiteDatabase database = mDbHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(MagnetEntry.NAME, "NEOMICRO 200x300");
-        values.put(MagnetEntry.PRICE, 3000);
-        values.put(MagnetEntry.QUANTITY, 18);
-        values.put(MagnetEntry.SUPPLIER_PHONE, "+36203803295");
-
-        database.insert(MagnetEntry.TABLE_NAME, null, values);
     }
 
     @Override
@@ -126,5 +90,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mMagnetCursorAdapter.swapCursor(null);
+    }
+
+    private void insertDummyMagnet() {
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(MagnetEntry.NAME, "NEOMICRO 200x300");
+        values.put(MagnetEntry.PRICE, 3000);
+        values.put(MagnetEntry.QUANTITY, 18);
+        values.put(MagnetEntry.SUPPLIER_PHONE, "+36203803295");
+
+        database.insert(MagnetEntry.TABLE_NAME, null, values);
     }
 }
