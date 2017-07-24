@@ -3,17 +3,14 @@ package com.example.mrpeny.magnetinventory.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.example.mrpeny.magnetinventory.data.MagnetContract.MagnetEntry;
 
 /**
- * Database helper class that creates and manages the magnet_inventory
+ * Database helper class that creates and manages the magnet_inventory.
  */
 
 public class MagnetDbHelper extends SQLiteOpenHelper {
-
-    private static final String LOG_TAG = MagnetDbHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "magnet_inventory.db";
 
@@ -26,7 +23,6 @@ public class MagnetDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        // TODO: change BLOB to NOT NULL
         final String SQL_CREATE_MAGNETS_TABLE = "CREATE TABLE " + MagnetEntry.TABLE_NAME + " (" +
                 MagnetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 MagnetEntry.NAME + " TEXT NOT NULL, " +

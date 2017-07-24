@@ -28,9 +28,14 @@ import com.example.mrpeny.magnetinventory.data.MagnetContract.MagnetEntry;
 
 import java.io.ByteArrayOutputStream;
 
-public class DetailActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
-    // TODO: Delete if unused
-    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
+/**
+ * Adds a new magnet entry into the magnets table.
+ * Shows the details of an existing Magnet Entry from magnets table and enables user to edit its
+ * values.
+ */
+public class DetailActivity extends AppCompatActivity
+        implements android.app.LoaderManager.LoaderCallbacks<Cursor> {
+    // Unique id for the Loader.
     private static final int MAGNET_DETAIL_LOADER = 0;
     // Request code for image capture intent. It is used for checking whether returning intent
     // holds the requested result we need in onActivityResult method.
@@ -51,6 +56,7 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
     // activity.
     private boolean mMagnetModified = false;
 
+    // Attach listener to view that tracks whether magnet data has been changed by the user.
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -62,7 +68,6 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: Create scroll view, Add TextInputLayout
         setContentView(R.layout.activity_detail);
 
         final Intent intent = getIntent();
@@ -71,11 +76,11 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         mCurrentMagnetUri = intent.getData();
 
         if (mCurrentMagnetUri == null) {
-            setTitle(getString(R.string.editor_activity_title_new_magnet));
-            // Options Menu has changed and should be recreated
+            setTitle(getString(R.string.detail_activity_title_new_magnet));
+            // Options Menu has changed and should be recreated.
             invalidateOptionsMenu();
         } else {
-            setTitle(getString(R.string.editor_activity_title_edit_magnet));
+            setTitle(getString(R.string.detail_activity_title_edit_magnet));
             getLoaderManager().initLoader(MAGNET_DETAIL_LOADER, null, this);
         }
 
@@ -100,9 +105,9 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+        MenuItem deleteMenuItem = menu.findItem(R.id.action_delete);
 
         if (mCurrentMagnetUri == null) {
-            MenuItem deleteMenuItem = menu.findItem(R.id.action_delete);
             deleteMenuItem.setVisible(false);
         }
         return true;
@@ -112,9 +117,9 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
     public void onBackPressed() {
         if (!mMagnetModified) {
             super.onBackPressed();
+            return;
         }
-
-        showDeleteConfirmationDialog();
+        showUnsavedChangesDialog();
     }
 
     @Override
@@ -123,7 +128,7 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         switch (item.getItemId()) {
             case R.id.action_save:
                 // Check whether saving was successful or not.
-                // If yes, then finish current Activity, if no, then stay in the current Activity
+                // If yes, then finish current Activity, if no, then stay in the current Activity.
                 if (saveMagnet()) {
                     finish();
                 }
@@ -146,14 +151,18 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    * Logic for inserting or updating the Magnet Entry
+    */
     private boolean saveMagnet() {
         boolean magnetSaved = true;
 
         if (isValidMagnet()) {
             ContentValues contentValues = getContentValues();
-            // Check whether it's a new Magnet to insert or an existing Magnet to update
+            // Check whether it is a new Magnet to insert or an existing Magnet to update.
             if (mCurrentMagnetUri == null) {
                 Uri newUri = getContentResolver().insert(MagnetEntry.CONTENT_URI, contentValues);
+                // If newUri is not null then insertion was successful else unsuccessful.
                 if (newUri == null) {
                     Toast.makeText(this, getString(R.string.toast_message_magnet_not_saved),
                             Toast.LENGTH_SHORT).show();
@@ -162,7 +171,9 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
                             Toast.LENGTH_SHORT).show();
                 }
             } else {
-                int rowsUpdated = getContentResolver().update(mCurrentMagnetUri, contentValues, null, null);
+                int rowsUpdated = getContentResolver().update(mCurrentMagnetUri, contentValues,
+                        null, null);
+                // If there were no rows updated then the update failed.
                 if (rowsUpdated == 0) {
                     Toast.makeText(this, getString(R.string.toast_message_magnet_update_failed),
                             Toast.LENGTH_SHORT).show();
@@ -172,7 +183,6 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
                             Toast.LENGTH_SHORT).show();
                 }
             }
-
         } else {
             Toast.makeText(this, getString(R.string.toast_message_fill_in_all_fields),
                     Toast.LENGTH_SHORT).show();
@@ -194,6 +204,7 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
             isValidMagnet = false;
         }
 
+        // Checking the imageView whether it contains a Drawable taken by the user.
         if (magnetImageView.getDrawable() == null) {
             isValidMagnet = false;
         }
@@ -226,6 +237,7 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmapMagnetImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] image = stream.toByteArray();
+        // Put the byte array into the contentValuse that will be store as BLOB in the database.
         contentValues.put(MagnetEntry.IMAGE, image);
 
         return contentValues;
@@ -270,8 +282,12 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         dialog.show();
     }
 
+    /*
+    * Indicates a delete operation and shows its success in Toast messages.
+    */
     private void deleteMagnet() {
         int rowsAffected = getContentResolver().delete(mCurrentMagnetUri, null, null);
+        // If now rows were affected by the delete operation then it failed.
         if (rowsAffected == 0) {
             Toast.makeText(this, getString(R.string.toast_message_magnet_not_deleted),
                     Toast.LENGTH_SHORT).show();
@@ -282,6 +298,9 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         }
     }
 
+    /*
+    * Initiates an image capture Intent in case there is a component that can handle it.
+    */
     private void takePhoto() {
         Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Check whether there is a component that can receive the Capture Image Intent
@@ -290,6 +309,9 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         }
     }
 
+    /*
+    * Processes the result of the image capture Intent.
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -383,10 +405,14 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         mMagnetModified = true;
     }
 
+    /*
+    * Sends a dial Intent with the number of supplier.
+    */
     public void callSupplier(View view) {
         String supplierPhone = supplierPhoneEditText.getText().toString().trim();
+        // Check whether there is a phone number to call. If not then a Toast alerts the user.
         if (TextUtils.isEmpty(supplierPhone)) {
-            Toast.makeText(this, R.string.add_phone_number, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_message_add_phone_number, Toast.LENGTH_SHORT).show();
             return;
         }
         // Check whether there is a component that can receive the Dial Intent

@@ -9,28 +9,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.mrpeny.magnetinventory.data.MagnetContract.MagnetEntry;
 
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.data;
-import static android.R.attr.name;
-import static android.os.Build.VERSION_CODES.M;
-
 /**
- * Content Provider that manages CRUD methods in magnet_inventory database
+ * Content Provider that manages CRUD methods in magnet_inventory database.
  */
-
 public class MagnetProvider extends ContentProvider {
-    private static final String LOG_TAG = MagnetProvider.class.getSimpleName();
 
     private final static int MAGNETS = 100;
     private final static int MAGNET_ID = 101;
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
-    private MagnetDbHelper mDbHelper;
 
     static {
         sUriMatcher.addURI(MagnetContract.CONTENT_AUTHORITY, MagnetContract.PATH_MAGNETS, MAGNETS);
@@ -39,10 +29,11 @@ public class MagnetProvider extends ContentProvider {
                 MAGNET_ID);
     }
 
+    private MagnetDbHelper mDbHelper;
+
     @Override
     public boolean onCreate() {
         mDbHelper = new MagnetDbHelper(getContext());
-
         return true;
     }
 
@@ -116,7 +107,6 @@ public class MagnetProvider extends ContentProvider {
         long newMagnetID = database.insert(MagnetEntry.TABLE_NAME, null, contentValues);
 
         if (newMagnetID == -1) {
-            Log.e(LOG_TAG, "Failed to insert magnet.");
             return null;
         }
 

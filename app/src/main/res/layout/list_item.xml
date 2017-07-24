@@ -32,10 +32,10 @@
 
             <TextView
                 style="@style/DetailsStyle"
-                android:paddingLeft="@dimen/text_view_spacing"
-                android:paddingStart="@dimen/text_view_spacing"
-                android:paddingRight="@dimen/text_view_spacing"
                 android:paddingEnd="@dimen/text_view_spacing"
+                android:paddingLeft="@dimen/text_view_spacing"
+                android:paddingRight="@dimen/text_view_spacing"
+                android:paddingStart="@dimen/text_view_spacing"
                 android:text="@string/currency" />
 
             <TextView
@@ -64,8 +64,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:onClick="saleProduct"
-        android:backgroundTint="@color/colorAccent"
-        android:text="@string/sale" />
+        android:text="@string/sale"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>
