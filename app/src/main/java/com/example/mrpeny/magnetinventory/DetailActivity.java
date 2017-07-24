@@ -8,15 +8,14 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -63,6 +62,7 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO: Create scroll view, Add TextInputLayout
         setContentView(R.layout.activity_detail);
 
         final Intent intent = getIntent();
@@ -109,6 +109,15 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
     }
 
     @Override
+    public void onBackPressed() {
+        if (!mMagnetModified) {
+            super.onBackPressed();
+        }
+
+        showDeleteConfirmationDialog();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
@@ -125,6 +134,14 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
                 return true;
             case R.id.action_take_photo:
                 takePhoto();
+                return true;
+            case android.R.id.home:
+                if (!mMagnetModified) {
+                    NavUtils.navigateUpFromSameTask(this);
+                    return true;
+                }
+                showUnsavedChangesDialog();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -212,6 +229,26 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
         contentValues.put(MagnetEntry.IMAGE, image);
 
         return contentValues;
+    }
+
+    private void showUnsavedChangesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.exit_without_saving);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.discard, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void showDeleteConfirmationDialog() {
@@ -324,6 +361,7 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
             if (quantity > 0) {
                 quantity = quantity - 1;
                 quantityEditText.setText(String.valueOf(quantity));
+                mMagnetModified = true;
             }
         }
     }
@@ -337,9 +375,12 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
 
         if (!TextUtils.isEmpty(quantityString)) {
             quantity = Integer.parseInt(quantityString);
-            quantity = quantity + 1;
-            quantityEditText.setText(String.valueOf(quantity));
+        } else {
+            quantity = 0;
         }
+        quantity = quantity + 1;
+        quantityEditText.setText(String.valueOf(quantity));
+        mMagnetModified = true;
     }
 
     public void callSupplier(View view) {
@@ -348,9 +389,11 @@ public class DetailActivity extends AppCompatActivity implements android.app.Loa
             Toast.makeText(this, R.string.add_phone_number, Toast.LENGTH_SHORT).show();
             return;
         }
-
+        // Check whether there is a component that can receive the Dial Intent
         Intent callIntent = new Intent(Intent.ACTION_DIAL);
-        callIntent.setData(Uri.parse("tel:" + supplierPhone));
-        startActivity(callIntent);
+        if (callIntent.resolveActivity(getPackageManager()) != null) {
+            callIntent.setData(Uri.parse("tel:" + supplierPhone));
+            startActivity(callIntent);
+        }
     }
 }

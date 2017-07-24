@@ -169,5 +169,5 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_padding_large"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter" />
+        android:scaleType="centerCrop" />
 </LinearLayout>
